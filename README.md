@@ -1,6 +1,6 @@
 # .copyfiles
 
-This Bash script automates copying the contents of specific files and fixed files along with additional text to your clipboard. It's designed to be used with projects.
+This Bash script automates copying the contents of specific files and fixed files along with additional text to your clipboard.
 
 ## Prerequisites
 
