@@ -34,9 +34,9 @@ This Bash script automates copying the contents of specific files and fixed file
 
     - **At the end of the file add the following line**
 
-        `source ~/.copyfiles/script.sh`
+        `source ~/.copyfiles/script_linux.sh`
 
-        Replace `~/.copyfiles/script.sh` with the actual path of the project's script.
+        Replace `linux` with the actual OS name of your system (either `linux` or `macos`).
     
     - Save the changes to your `.bashrc` file.
 
