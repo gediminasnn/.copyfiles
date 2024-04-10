@@ -1,12 +1,19 @@
 copyfiles() {
   local java_files_content=""
 
-  # Change directory to the project's Java source directory
-  local project_dir=~/j-s.bank-account-balance-manager/
-  cd "$project_dir" || return
+  # Change directory to the project's Java source directory (optional)
+  # local project_dir=~/j-s.bank-account-balance-manager/
+  # cd "$project_dir" || return
 
   # Find all Java files and concatenate not exluded files
-  local exclude_files="RestServiceApplication.java CSVHelperTest.java RestServiceApplicationTests.java"
+  local exclude_files=""
+
+  local copyfiles_script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+  while IFS= read -r filename; do
+    exclude_files="$exclude_files $filename"
+  done < "$copyfiles_script_dir/exclude_files.txt"
+  exclude_files="${exclude_files:1}"
+  
   if [ $# -eq 0 ]; then
     # No arguments provided, get contents of all not excluded .java files
     local files_to_include=$(find . -type f -name '*.java')
@@ -27,8 +34,13 @@ copyfiles() {
     done
   fi
 
-  # Handle additional fixed files first
-  local additional_files="pom.xml"
+  # Handle additional fixed files
+  local additional_files=""
+  local copyfiles_script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+  while IFS= read -r filename; do
+    additional_files="$additional_files $filename"
+  done < "$copyfiles_script_dir/additional_files.txt"
+  additional_files="${additional_files:1}"
   for fixed_file in $additional_files; do
       local file_path=$(find . -type f -name "$fixed_file" -print -quit)
       if [[ -f "$file_path" ]]; then
@@ -39,52 +51,16 @@ copyfiles() {
   done
 
   # Append the additional argument to the content
-  local append_text="
-___________________________________________________________________
-  Above I provided you the code that I think that you will need to complete my request
-Below I will provide you the task itself that I am doing so you have more context on what I need
-______________________________________________________________________
-Application sole purpose is to manage bank account
-balance via Rest API.
-Create endpoints to:
-● Import bank statement for one or several bank accounts via
-CSV. ● Export bank statement for one or several bank
-accounts via CSV. ● Calculate account balance for a given
-date.
-Notes:
-● Information imported/exported via CSV:
-○ Account number, mandatory
-○ Operation date/time, mandatory
-○ Beneficiary, mandatory
-○ Comment, optional
-○ Amount, mandatory
-○ Currency, mandatory
-● When exporting CSV, accept:
-○ date from, optional
-○ date to, optional
-● When calculating account balance accept:
-○ account number, mandatory
-○ date from, optional
-○ date to, optional
-
-Don’t forget:i
-● Source code should be provided in GIT repository (Github , Bitbucket,
-Gitlab or other platform). Do commit early and often.
-● Cover your code with tests;
-● Use best practices and coding conventions;
-● Provide documentation how to build and run your solution;
-● Try to use some Java 8 features.
-____________________________________________________________
-And my request is this : 
-"
-  java_files_content+=$'\n'"$append_text"
+  local copyfiles_script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+  local append_text_file="$copyfiles_script_dir/append_text.txt"
+  java_files_content+=$'\n'$(<"$append_text_file")
 
   # Copy the content to the clipboard
   # On WSL you may need to replace 'xclip -selection clipboard' with 'clip.exe'
   echo "$java_files_content" | xclip -selection clipboard
 
   # Return to the original directory (optional)
-  cd - > /dev/null
+  # cd - > /dev/null
 
   # Provide feedback
   echo "Contents of all Java files have been copied to clipboard. Appended custom text if provided."
