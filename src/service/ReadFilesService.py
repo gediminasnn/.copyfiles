@@ -14,7 +14,7 @@ class ReadFilesService:
         for root, _, files in os.walk('.'):
             for file in files:
                 if file.endswith(fileType) and file not in excludeFiles:
-                    fileContents += "#" + os.path.join(root, file) + '\n'
+                    fileContents += os.path.join(root, file) + '\n\n'
                     fileContents += self.fileReader.readFileContent(os.path.join(root, file))
         return fileContents
 
@@ -23,7 +23,7 @@ class ReadFilesService:
         fileContents = ""
         for fixedFile in additionalFiles:
             filePath = self.fileFinder.find(fixedFile)
-            fileContents += "#" + filePath + '\n'
+            fileContents += filePath + '\n\n'
             fileContents += self.fileReader.readFileContent(filePath)
         return fileContents
 

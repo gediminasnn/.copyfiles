@@ -1,5 +1,3 @@
-# src/copier/clipboardCopier.py
-
 import subprocess
 import platform
 

@@ -8,11 +8,11 @@ class FilesContentService:
         self.readFilesService = ReadFilesService()
         self.clipboardCopier = ClipboardCopier()
 
-    def readAndCopyFilesContent(self, fileType):
+    def readAndCopyFilesContent(self, fileTypes):
         fileContents = ""
 
-        # Read contents of not excluded files of the specified type
-        fileContents += self.readFilesService.readNotExcludedFilesContent(fileType)
+        for fileType in fileTypes:
+            fileContents += self.readFilesService.readNotExcludedFilesContent(fileType)
 
         # Read additional fixed files
         fileContents += self.readFilesService.readAdditionalFilesContent()
